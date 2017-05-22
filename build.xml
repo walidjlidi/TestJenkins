@@ -3,6 +3,7 @@
 <project name="poc" default="build" basedir=".">
     <property name="build-dir" value="${basedir}/build" />
     <property name="src-dir" value="${basedir}/src" />
+    <property name="cache-dir" value="${basedir}/var/cache" />
 
     <target name="build"
         depends="build-common,phploc,phpdox,pdepend,phpmd-ci,phpcs-ci,phpcpd,phpcb" />
@@ -186,6 +187,14 @@
         <mkdir dir="${build-dir}/coverage" />
         <mkdir dir="${build-dir}/logs" />
         <mkdir dir="${build-dir}/pdepend" />
+    </target>
+
+    <target name="writable-cache" description="Make cache folder writable">
+        <exec executable="chmod" failonerror="true">
+            <arg value="777" />
+            <arg value="-R" />
+            <arg value="${cache-dir}" />
+        </exec>
     </target>
 
 </project>
