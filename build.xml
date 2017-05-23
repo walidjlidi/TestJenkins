@@ -48,6 +48,7 @@
         <delete dir="${build-dir}/coverage" />
         <delete dir="${build-dir}/logs" />
         <delete dir="${build-dir}/pdepend" />
+        <delete dir="${cache-dir}" />
     </target>
 
     <target name="composer" depends="clean-composer,composer-install,composer-update" description="Install or update dependencies" />
@@ -187,6 +188,7 @@
         <mkdir dir="${build-dir}/coverage" />
         <mkdir dir="${build-dir}/logs" />
         <mkdir dir="${build-dir}/pdepend" />
+        <mkdir dir="${cache-dir}" />
     </target>
 
     <target name="writable-cache" description="Make cache folder writable">
