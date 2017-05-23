@@ -4,6 +4,8 @@
     <property name="build-dir" value="${basedir}/build" />
     <property name="src-dir" value="${basedir}/src" />
     <property name="cache-dir" value="${basedir}/var/cache" />
+    <property name="logs-dir" value="${basedir}/var/logs" />
+    <property name="var-dir" value="${basedir}/var" />
 
     <target name="build"
         depends="build-common,phploc,phpdox,pdepend,phpmd-ci,phpcs-ci,phpcpd,phpcb" />
@@ -23,7 +25,7 @@
     <target name="build-parallel-clean"
         depends="clean,build-common,tools-parallel" />
 
-    <target name="build-common" depends="lint,prepare,composer,phpunit,writable-cache" />
+    <target name="build-common" depends="lint,prepare,composer,phpunit,writable" />
 
     <target name="tools-parallel" description="Run tools in parallel">
         <parallel threadCount="2">
@@ -49,6 +51,7 @@
         <delete dir="${build-dir}/logs" />
         <delete dir="${build-dir}/pdepend" />
         <delete dir="${cache-dir}" />
+        <delete dir="${logs-dir}" />
     </target>
 
     <target name="composer" depends="clean-composer,composer-install,composer-update" description="Install or update dependencies" />
@@ -189,15 +192,18 @@
         <mkdir dir="${build-dir}/logs" />
         <mkdir dir="${build-dir}/pdepend" />
         <mkdir dir="${cache-dir}" />
+        <mkdir dir="${logs-dir}" />
     </target>
 
-    <target name="writable-cache" description="Make cache folder writable">
-        <echo>Making the /var/cache folder writable</echo>
+    <target name="writable" description="Make /var folder writable">
+        <echo>Making the /var/ (cache, logs) folder writable</echo>
         <exec executable="chmod" failonerror="true">
             <arg value="777" />
             <arg value="-R" />
-            <arg value="${cache-dir}" />
+            <arg value="${var-dir}" />
         </exec>
     </target>
-
+    <target name="result-link" description="Test link">
+        <echo>http://${SUBDOMAIN}.dev</echo>       
+    </target>
 </project>
