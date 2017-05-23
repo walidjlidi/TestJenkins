@@ -23,7 +23,7 @@
     <target name="build-parallel-clean"
         depends="clean,build-common,tools-parallel" />
 
-    <target name="build-common" depends="lint,prepare,composer,phpunit" />
+    <target name="build-common" depends="lint,prepare,composer,phpunit,writable-cache" />
 
     <target name="tools-parallel" description="Run tools in parallel">
         <parallel threadCount="2">
@@ -190,6 +190,7 @@
     </target>
 
     <target name="writable-cache" description="Make cache folder writable">
+        <echo>Making the /var/cache folder writable</echo>
         <exec executable="chmod" failonerror="true">
             <arg value="777" />
             <arg value="-R" />
