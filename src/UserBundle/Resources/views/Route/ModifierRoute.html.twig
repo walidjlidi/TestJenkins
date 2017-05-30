@@ -1,0 +1,60 @@
+{% extends 'base.html.twig' %}
+{% block title %}
+    تعديل حق العبور 
+{% endblock %}
+{% block titlebody %}
+    تعديل حق العبور  
+{% endblock %}
+{% block body %} 
+
+    <form  name='modifierroute' id='modifierroute' action='{{ paths('us_update_route',{'id':permission.id}) }}' method='post' >
+        <center>
+            <div class="form-group">
+                <h2> <label for="nom">حق العبور : {{ permission.path }}</label></h2>
+            </div>
+        </center>
+        <div class="row">
+            <div class="form-group">
+                <div class="col-md-12">
+                    <label>
+                        الملاحظات 
+                    </label> 
+                    <textarea name="modifierroute[intitule]"   class="form-control" >{{ permission.intitule }}</textarea>
+                </div>
+            </div>
+        </div>
+
+
+        <center>
+
+            <label>
+                إخفاء الحق 
+            </label>
+            {% if permission.visible == 2 %}
+                <input type="checkbox" name="modifierroute[visible]" id="modifierroute_visible" checked="checked" >
+            {% else %}
+                <input type="checkbox" name="modifierroute[visible]" id="modifierroute_visible" >
+            {% endif %}
+
+        </center>
+
+
+        <br><br>
+
+        <br/><br/>
+        <center>
+            <input type="submit" class="btn btn-success btn-lg" value="تآكيد التعديل"  />
+        </center>
+        <!-- End Confirmation the add's action -->  
+        <!-- going back to the initial list of ministre-->
+        <div class="pull-right">
+            <button type="button" class="btn btn-primary btn-lg" style="float: right" onclick="window.location = '{{ paths('us_list_routes') }}';">
+                العودة إلى القائمة 
+            </button>
+        </div>
+
+    </form>
+
+{% endblock %}
+
+

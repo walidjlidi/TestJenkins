@@ -1,0 +1,152 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    توزيع الأدوار على المستخدمين
+{% endblock %}
+{% block titlebody %}
+    توزيع الأدوار على المستخدمين
+{% endblock %}
+
+{% block body %} 
+    <style>
+        div.wrapper {
+            width: 100%;
+
+            overflow: auto;
+        }
+        label.checkroles{
+            border: 2px inset ;
+        }
+        input[type=checkbox]
+        {
+
+            /* Double-sized Checkboxes */
+            -ms-transform: scale(1.5); /* IE */
+            -moz-transform: scale(1.5); /* FF */
+            -webkit-transform: scale(1.5); /* Safari and Chrome */
+            -o-transform: scale(1.5); /* Opera */
+          /*  padding: 10px;*/
+        }
+    </style>
+
+
+
+    <div id="colvis"></div>
+    <form class="form-signin" name='gererutilisateur' id='gererutilisateur' action='{{ paths('us_user_gestion') }}' method='post' >
+        <div class="wrapper">
+            <table class="table table-striped table-hover table-bordered rtl" id="tableRoleUser">
+                <thead>
+                    <tr>
+                        <th>المستخدمون</th>
+
+                        {% for role in roles %}
+                            <th>  {{ role.nom }} </th>
+                            {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in users %}
+                        <tr> 
+                            <td>
+                                {{user.username}}
+                            </td>
+                            {% for role in roles %}
+                                {% if (role in trolesdelutilisateur[user.getUsername()]) %}
+                                    <td>
+                                        <input type="hidden" name="liens[]" value={{role.nom ~ "//" ~ user.username ~ "xoo"}}>
+                                        <input type="checkbox" name="liens[]" checked="checked" value={{role.nom ~ "//" ~ user.username}}>
+                                    </td>
+                                {%else%}
+                                    <td>
+                                        <input type="hidden" name="liens[]" value={{role.nom ~ "//" ~ user.username ~ "xoo"}}>
+                                        <input type="checkbox" name="liens[]" value={{role.nom ~ "//" ~ user.username}}>
+
+                                    </td>
+                                {% endif %}
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <br/>
+        <br/>
+        <center>
+            <button type="submit" class="btn btn-success btn-lg">
+                تأكيد التسجيل 
+            </button>
+        </center>
+    </form>
+{% endblock %}
+
+{% block javascript %}
+    <script>
+        $(document).ready(function () {
+            var table = $('#tableRoleUser').DataTable({
+                autoWidth: false,
+                //"ordering": false,
+                scrollX: true,
+                //"pageLength":800,
+                "bSort": false,
+                "aoColumnDefs": [
+                    {'bSortable': true, 'aTargets': [1]}
+                ],
+                //  "pageLength": 1000,
+                "language": {
+                    "sLengthMenu": "عرض _MENU_ تسجيل",
+                    "zeroRecords": "لا يوجد سجلات",
+                    "info": "hide",
+                    "infoEmpty": "عرض 0 إلى 0 من 0 إدخالات",
+                    "sInfo": "عرض_START_ إلى _END_ من _TOTAL_ إدخالات",
+                    "infoFiltered": "",
+                    "sSearch": "<span class='input-group-add-on'> <i class='fa fa-search'></i></span> &nbsp;",
+                    "oPaginate": {
+                        "sFirst": "الأول",
+                        "sLast": "الأخير",
+                        "sNext": "التالي",
+                        "sPrevious": "السابق"
+                    }
+                }
+            });
+            $("#tableRoleUser thead th").each(function (i) {
+                if (i >= 1) {
+                    var name = table.column(i).header();
+                    var spanelt = document.createElement('input');
+                    var label = document.createElement("label");
+                    label.className="checkroles";
+                    var description = document.createTextNode(name.innerHTML);
+                    spanelt.type = "checkbox";
+                    spanelt.setAttribute("checked", "checked");
+                    label.appendChild(spanelt);   // add the box to the element
+                    label.appendChild(description);// add the description to the element
+
+
+                    spanelt.innerHTML = name.innerHTML;
+                    $(spanelt).attr("colidx", i);
+                    $(label).attr("style", 'margin-left: 10px;margin-bottom: 5px;'); // store the column idx on the button
+
+                    $(spanelt).on('click', function (e) {
+                        //e.preventDefault();
+                        // Get the column API object
+                        var column = table.column($(this).attr('colidx'));
+                        // Toggle the visibility
+                        column.visible(!column.visible());
+                        if (column.visible()) {
+                            spanelt.removeAttribute("checked", "checked");
+
+                        }
+                        else {
+                            spanelt.removeAttribute("checked");
+
+                        }
+                        table.columns.adjust().draw();
+                    });
+                    // add the label element to your div
+                    $("#colvis").append($(label));
+                }
+            });
+
+
+        });
+    </script>
+{% endblock %}

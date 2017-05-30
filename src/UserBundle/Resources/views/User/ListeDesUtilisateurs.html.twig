@@ -1,0 +1,88 @@
+{% extends 'base.html.twig' %}
+{% block title %}
+    إدارة بيانات المستخدمين
+{% endblock %}
+{% block titlebody %}
+    إدارة بيانات المستخدمين
+{% endblock %}
+{% block body %} 
+
+    <a href="{{ paths('us_create_user') }}">
+        <button type="button" class="btn btn-success btn-lg pull-right">
+            إضافة مستخدم 
+        </button>
+    </a>
+    <br/>
+    <br/>
+
+    <table class="table table-striped table-hover table-bordered rtl" id="listeUtilisateurs">
+        <thead><tr>
+                <th>اسم المستخدم</th>
+                <th>الإسم</th>
+                <th> اللقب</th> 
+
+                <th>الأدوار</th>
+                <th>الاجراءات</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in users %}
+                <tr>
+                    <td>{{ user.username }}</td>
+                    <td>{{ user.prenom}}</td>
+                    <td>{{ user.nom }}</td>
+                    <td>
+                        {% for role in trolesdelutilisateur[user.username] %}
+                            {{role.nom}}
+                        {% endfor %}
+                    </td>
+
+                    <td class="tdaction">
+                        <a href="{{paths('us_update_user',{'id':user.id })}}">
+                            <i class="fa fa-edit pull-left"></i>
+                        </a>
+                        <a  class="deleteAction" data-info="المستخدم  " data-href="{{ paths('us_delete_user', { 'id': user.id  }) }}">
+                            <i class="fa fa-remove pull-right"></i>
+                        </a>
+                    </td>
+
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <br/>
+    <a onclick="exports([4], document.title, 'listeUtilisateurs')">
+        <img class="pull-left" src={{asset("assets/images/excel-format.png")}}>
+    </a>
+
+
+
+{% endblock %}
+{% block javascript %}
+    <script>
+
+
+        $(document).ready(function () {
+
+            $('#listeUtilisateurs').DataTable({
+                "language": {
+                    "sLengthMenu": "عرض _MENU_ تسجيل",
+                    "zeroRecords": "لا يوجد سجلات",
+                    "info": "hide",
+                    "infoEmpty": "عرض 0 إلى 0 من 0 إدخالات",
+                    "sInfo": "عرض_START_ إلى _END_ من _TOTAL_ إدخالات",
+                    "infoFiltered": "",
+                    "sSearch": "<span class='input-group-add-on'> <i class='fa fa-search'></i></span> &nbsp;",
+                    "oPaginate": {
+                        "sFirst": "الأول",
+                        "sLast": "الأخير",
+                        "sNext": "التالي",
+                        "sPrevious": "السابق"
+                    }
+                }
+            });
+
+        });
+    </script>
+{% endblock %}

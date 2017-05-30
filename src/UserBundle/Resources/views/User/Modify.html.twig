@@ -1,0 +1,111 @@
+{% extends 'base.html.twig' %}
+{% block title %}
+تعديل المستخدم 
+{% endblock %}
+
+{% block titlebody %}
+تعديل المستخدم 
+{% endblock %}
+{% block body %} 
+    <style>
+        div.wrapper {
+            width: 100%;
+
+            overflow: auto;
+        }
+        label.checkroles{
+            border: 2px inset ;
+        }
+        input[type=checkbox]
+        {
+
+            /* Double-sized Checkboxes */
+            -ms-transform: scale(1.5); /* IE */
+            -moz-transform: scale(1.5); /* FF */
+            -webkit-transform: scale(1.5); /* Safari and Chrome */
+            -o-transform: scale(1.5); /* Opera */
+            /*  padding: 10px;*/
+        }
+    </style>
+    <form class="form-signin" name='modifierutilisateur' id='modifierutilisateur' action='{{ paths('us_update_user',{'id':user.id}) }}' method='post' >
+
+        <div class="row form-group" >
+            <div class="col-md-6">
+                <label> اسم المستخدم   </label>
+                <input type="text" name="modifierutilisateur[nomutilisateur]" id="modifierutilisateur_nomutilisateur" required class="form-control" value={{ user.username }}>
+            </div>
+        </div>
+
+
+
+        <div class="row margin-top-20">
+            <div class="form-group">
+                <div class="col-md-6 col-sm-12">
+                    <label>
+                        الإسم
+                    </label>
+                    <input type="text" name="modifierutilisateur[prenom]" id="modifierutilisateur_prenom" required class="form-control" value={{ user.prenom }}>
+                </div>
+                <div class="col-md-6 col-sm-12">
+                    <label>
+                        اللقب
+                    </label>
+                    <input type="text" name="modifierutilisateur[nom]" id="modifierutilisateur_nom" required class="form-control" value={{ user.nom }}>
+                </div>
+            </div>
+        </div>
+
+
+
+        <div class="row margin-top-20">
+            <div class="form-group">
+                <div class="col-md-6 col-sm-12">
+                    <label>
+                        البريد الإلكتروني
+                    </label>
+                    <input type="text" name="modifierutilisateur[email]" id="modifierutilisateur_email" required class="form-control" value={{ user.email }}>
+                </div>
+                
+                    <div class="col-md-6 col-sm-12">
+                        <label>
+                            الأدوار
+                        </label>
+                        <div class="select-group">
+                            <select required name="modifierutilisateur[attribuerrole][]" data-placeholder="--حدد--" class="form-control pointer required multi-select chosen-select chosen-rtl" multiple="true">
+                                {% for role in roles %}
+                                    <option value="{{role.id}}"   {% if ( role in userroles ) %} selected{% endif %}>{{role.nom}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                
+            </div>
+        </div>
+        <center>
+            <input type="submit" class="btn btn-success btn-lg" value="تآكيد التعديل "  />
+        </center>
+        <!-- End Confirmation the add's action -->  
+        <!-- going back to the initial list of ministre-->
+        <div class="pull-right">
+            <button type="button" class="btn btn-primary btn-lg" style="float: right" onclick="window.location = '{{ paths('us_user_index') }}';">
+                العودة إلى القائمة 
+            </button>
+        </div>
+
+    </form>
+
+{% endblock %}
+{% block javascript %}
+    <script>
+        $(document).ready(function () {
+            $(".multi-select").chosen({width: "100%"});
+        });
+    </script>
+{% endblock %}
+
+
+
+
+
+
+
