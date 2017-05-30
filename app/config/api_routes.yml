@@ -1,0 +1,8 @@
+utilisateurs:
+    resource: UserBundle\Controller\UtilisateurController
+    type:     rest
+    prefix: /utilisateur    
+roles:
+    resource: UserBundle\Controller\RoleController
+    type:     rest
+    prefix: /role
